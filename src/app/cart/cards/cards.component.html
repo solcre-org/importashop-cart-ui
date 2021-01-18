@@ -1,0 +1,192 @@
+<!-- *** LISTADO DE TARJETAS *** -->
+
+<div *ngIf="!addMode">
+    <div class="title-holder">
+
+        <h2 *ngIf="!editMode" class="title">Método de pago</h2>
+        <h2 *ngIf="editMode" class="title">Mis tarjetas</h2>
+
+        <div class="right-actions" *ngIf="!editMode && !retryPay">
+
+            <a (click)="changeTab(1)" class="link-word">Volver a formas de envío</a>
+
+        </div> <!-- .right-actions -->
+
+    </div><!-- .title-holder -->
+
+    <div *ngIf="loading" class="loading loading-center">
+        <div class="spinner lg red-spinner"></div>
+    </div>
+
+    <form class="styled-form" [formGroup]="cardForm">
+
+            <div *ngIf="cards.length == 0 && !loading" class="placeholder-cards">
+
+                    <a (click)="changeAddMode(true)" class="add-btn" style="display: inline-block;">Agregar
+                        una nueva
+                        tarjeta</a>
+    
+                </div>
+
+
+        <div *ngIf="!editMode" class="radios-container">
+
+
+            <label class="radio-holder" *ngFor="let card of cards">
+
+                <input type="radio" [value]="card.id" class="input-radio" formControlName="card"
+                    (change)="setCard(card)">
+
+                <span class="circle"></span>
+                <span class="card-logo {{card.cardType}}">{{card.cardType}}</span>
+                <span class="text">
+                    <span class="small"> **** **** **** {{card.lastDigits}}</span></span>
+
+
+            </label><!-- .radio-holder -->
+
+            <label class="radio-holder" *ngFor="let paymentMethod of paymentMethods">
+
+                <input type="radio" [value]="paymentMethod.id" class="input-radio" formControlName="card"
+                    (change)="setCard(paymentMethod)">
+
+                <span class="circle"></span>
+                <span class="card-logo {{paymentMethod.id}}">{{paymentMethod.id}}
+                </span>
+
+
+            </label><!-- .radio-holder -->
+
+
+            <a (click)="changeAddMode(true)" class="add-btn" style="margin-top:20px;display: inline-block;">Agregar una
+                    nueva
+                    tarjeta</a>
+
+
+        </div><!-- .radios-holder -->
+
+        <div *ngIf="editMode" class="radios-container">
+
+            <div class="actions-radio-holder" *ngFor="let card of cards;let i = index">
+                <label class="radio-holder">
+                    <span class="card-logo {{card.cardType}}">{{card.cardType}}</span>
+                    <span class="text">
+                        <span class="small">
+                            <span class="updateState">**** **** **** {{card.lastDigits}}</span>
+                        </span>
+                    </span>
+                </label><!-- .radio-holder -->
+                <button class="delete-btn" (click)="deleteCard(card.id,i)"></button>
+            </div>
+        </div><!-- .radios-holder -->
+
+
+
+
+        <div *ngIf="!editMode" class="submit-holder align-center">
+
+
+            <button type="button" class="link-btn highlighted success" (click)="sendCard(cardInfo)"
+                [attr.disabled]="!cardSelected ? true :null "><span class="text">Continuar</span></button>
+
+
+
+            <a  *ngIf="!retryPay" (click)="changeTab(1)" class="link-word">Volver a formas de envío</a>
+
+
+        </div><!-- .submit-holder -->
+
+    </form>
+
+</div>
+
+
+<!-- *** AGREGAR/EDITAR TARJETA *** -->
+
+<div id="card-new" class="address-view active" *ngIf="addMode">
+
+    <div class="title-holder">
+        <p class="title">Agregar nueva tarjeta</p>
+
+        <div class="right-actions">
+
+            <a *ngIf="!editMode" (click)="changeAddMode(false)" class="link-word toggleAddressView">Volver a métodos de
+                pago</a>
+
+        </div> <!-- .right-actions -->
+    </div><!-- .title-holder -->
+
+    <form [formGroup]="newCardForm" class="styled-form">
+
+        <label class="label">
+            <span class="caption">Número de tarjeta</span>
+            <input type="text" class="input" (change)="onCardNumberChange()" formControlName="cardNumber"
+                placeholder="Ingrese su número de tarjeta...">
+            <span *ngIf="cardPaymentMethod" class="card-logo {{cardPaymentMethod}}">{{cardPaymentMethod}}</span>
+
+
+        </label>
+
+
+        <label class="label">
+            <span class="caption">Código de seguridad</span>
+            <input type="text" class="input" formControlName="securityCode" placeholder="Ingrese su CVV de tarjeta...">
+
+        </label>
+
+
+
+        <label class="label">
+            <span class="caption">Fecha de expiración (MM/YY)</span>
+
+            <input type="text" class="input input-auto" size="8" minlength="2" maxlength="2" formControlName="cardExpirationMonth"
+                placeholder="Mes MM">
+            <input type="text" class="input input-auto" size="8" minlength="2" maxlength="2" formControlName="cardExpirationYear"
+                placeholder="Año YY">
+
+        </label>
+
+        <label class="label">
+            <span class="caption">Nombre que aparece en la tarjeta</span>
+            <input type="text" class="input" formControlName="cardholderName" placeholder="Ingrese el nombre...">
+
+        </label>
+
+        <label class="label">
+            <span class="caption">Tipo de documento</span>
+
+            <span class="select-container">
+                <select formControlName="docType" class="input">
+                    <option *ngFor="let identificationType of identificationTypes" [value]="identificationType.id">
+                        {{ identificationType.name }}</option>
+                </select>
+            </span>
+
+        </label>
+
+        <label class="label">
+            <span class="caption">Documento</span>
+            <input type="text" class="input" formControlName="docNumber" placeholder="Ingrese el documento...">
+
+        </label>
+
+
+
+        <div class="submit-holder align-center">
+            <button type="submit" class="link-btn highlighted success" (click)="onAddCard()" [class.loading]="loading"
+                [attr.disabled]="!newCardForm.valid ? true : null || !cardPaymentMethod ? true : null || loading ? true : null"><span
+                    class="text">Agregar</span><span class="spinner"></span></button>
+
+            <a (click)="changeAddMode(false)" class="link-word">Volver</a>
+
+            <div *ngIf="cardMessage" class="message">{{cardMessage}}</div>
+
+        </div>
+
+
+
+
+    </form>
+
+
+</div>

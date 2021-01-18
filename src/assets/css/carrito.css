@@ -1,0 +1,213 @@
+
+/* CARRITO */
+
+@media (max-width:979px){
+    .carrito-holder table, 
+    .carrito-holder table thead,
+    .carrito-holder table thead th, 
+    .carrito-holder table tbody,
+    .carrito-holder table tbody tr,
+    .carrito-holder table tbody td {
+        display: block;
+    }
+
+    .carrito-holder table thead{
+        display: none;
+    }
+    .carrito-holder td{
+        width: 100%;
+    }
+    .carrito-holder td.input-holder,
+    .carrito-holder td.price{
+        display: inline-block;
+        vertical-align: middle;
+        width: auto;
+        padding-top: 0px;
+    }
+    .carrito-holder td.input-holder{
+        /*padding-left: 50px;*/
+    }
+
+    .carrito-holder td.info .name{
+        /*width: 100% !important;*/
+    }
+}
+
+
+.carrito-holder{
+    margin-top:15px;
+}
+.carrito-holder table{
+    width: 100%;
+}
+.carrito-holder thead th:last-child{
+    text-align: right;
+}
+.carrito-holder .item{
+    position: relative;
+    border-bottom: 1px solid #eaeaea;
+}
+.carrito-holder .item.no-stock{
+    
+}
+.carrito-holder td{
+    padding: 13px 0 10px;
+    vertical-align: middle;
+}
+.carrito-holder td.input-holder{
+    position: relative;
+}
+.carrito-holder td.input-holder .input{
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.carrito-holder td.input-holder input.input{
+    padding-left: 18px;
+    padding-right: 18px;
+    text-align: left;
+}
+.carrito-holder td.input-holder .input-btn{
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 50%;
+    left: 5px;
+    margin-top: -20px;
+    background-size:80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../images/input-btn.png);
+}
+.carrito-holder td.input-holder .input-btn.next{
+    right: 5px;
+    left: auto;
+}
+.carrito-holder td.input-holder .input-btn.prev{
+    -webkit-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+}
+
+.carrito-holder td.info .image{
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 40px;
+}
+.carrito-holder td.info .name{
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 60px);
+    font-weight: 700;
+    font-size: 1.4em;
+    margin-left: 10px;
+}
+.carrito-holder td.info .name .no-stock{
+    display: none;
+    font-size: 0.8em;
+    color: #ed1c24;
+}
+.carrito-holder .item.no-stock td.info .name .no-stock{
+    display: block;
+}
+.carrito-holder td.info .image:before{
+    content: "";
+    display: block;
+    height: 0;
+    padding-bottom: 100%;
+}
+.carrito-holder td.info .delete-btn{
+    position: absolute;
+    top: 50%;
+    margin-top:-16px;
+    right: 0px;
+    width: 32px;
+    height: 32px;
+    background-size: 60%;
+    background-image: url(../images/delete-icon.png);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.carrito-holder td.price{
+    text-align: right;
+    margin-left: 10px;
+}
+.carrito-holder td.price .text{
+    font-weight: 700;
+    font-size: 1.8em;
+}
+.carrito-holder .total-container{
+    margin-top: 30px;
+    text-align: right;
+}
+.carrito-holder .total-container .total{
+    font-weight: 700;
+    font-size: 2.6em;
+}
+.carrito-holder .total-container .total .text{
+    display: block;
+    font-size: 0.5em;
+    font-weight: 500;
+    color: #757575;
+}
+
+#confirmacion .confirmation-holder{
+    text-align: center;
+}
+#confirmacion .confirmation-holder .image{
+    width: 175px;
+    height: 175px;
+    margin: 0 auto;
+}
+#confirmacion .confirmation-holder.success .image{
+    background-image: url(../images/confirmation-success.png);
+}
+#confirmacion .confirmation-holder.error .image{
+    background-image: url(../images/confirmation-error.png);
+}
+
+#confirmacion .confirmation-holder .title{
+    margin: 20px 0;
+}
+
+#confirmacion .confirmation-holder .link-btn{
+    margin-top: 30px;
+}
+
+
+
+@media (min-width:980px){
+
+    .carrito-holder{
+
+    }
+
+    .carrito-holder td.info{
+        position: relative;
+    }
+    .carrito-holder td.info .name{
+        font-size: 1.6em;
+        width: calc(100% - 130px);
+        margin-right: 20px;
+    }
+    .carrito-holder td.info .image{
+        width: 100px;
+    }
+    .carrito-holder td.info .delete-btn{
+        left: -40px;
+        right: auto;
+    }
+    .carrito-holder td.input-holder{
+        max-width: 90px;
+    }
+    .carrito-holder td.input-holder .input-btn{
+        margin-top: -15px;
+    }
+
+
+}

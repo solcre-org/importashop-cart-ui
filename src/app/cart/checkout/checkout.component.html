@@ -1,0 +1,515 @@
+<div class="tabs">
+    <!--
+
+        -->
+    <div class="tab">
+        <div class="tab-link" [class.active]="activeTab == 1 || activeTab == 2 || activeTab == 5">Envío</div>
+    </div>
+    <!-- 
+        -->
+    <div class="tab">
+        <div class="tab-link" [class.active]="activeTab == 3 || activeTab == 6 || activeTab == 7">Método de
+            pago</div>
+    </div>
+    <!-- 
+        -->
+    <div class="tab">
+        <div class="tab-link" [class.active]="activeTab == 4">Checkout</div>
+    </div>
+    <!-- 
+       
+        -->
+</div>
+
+
+<!-- *** FORMAS DE ENVIO *** -->
+<div class="wrapper extramini" *ngIf="activeTab == 1">
+
+
+    <div class="title-holder">
+
+        <h2 class="title">Forma de envío</h2>
+
+        <div class="right-actions">
+
+            <a (click)="backToCart()" class="link-word">Volver a carrito</a>
+
+        </div> <!-- .right-actions -->
+
+    </div><!-- .title-holder -->
+
+    <form class="styled-form" [formGroup]="shippingForm">
+
+        <div class="radios-container">
+
+            <label class="radio-holder" *ngFor="let shipping of shippingData">
+                <input type="radio" [value]="shipping.id" class="input-radio" formControlName="shipping"
+                    (change)="setShipping(shipping.price)">
+                <span class="circle"></span>
+                <span class="text">{{shipping.name}}
+                    <span *ngIf="shipping.price != 0" class="small">+ UYU ${{shipping.price}}</span>
+                    <span *ngIf="shipping.price == 0" class="small">Sin costo</span>
+                </span>
+            </label><!-- .radio-holder -->
+
+
+
+        </div><!-- .radios-holder -->
+
+
+        <div class="submit-holder align-center">
+
+            <button type="button" class="link-btn highlighted success"
+                [attr.disabled]="!shippingForm.valid ? true : null "
+                (click)="this.shippingSelected.id != 3 ? goToTab(2) : goToTab(3)"><span
+                    class="text">Continuar</span></button>
+
+
+            <a (click)="backToCart()" class="link-word">Volver a carrito</a>
+
+
+        </div><!-- .submit-holder -->
+
+    </form>
+
+</div><!-- .wrapper extramini -->
+
+
+<!-- *** MIS DIRECCIONES / AGENCIAS *** -->
+<div class="wrapper extramini" *ngIf="activeTab == 2">
+
+
+    <div class="title-holder">
+
+        <h2 *ngIf="shippingSelected.id == 1" class="title">Mis direcciones</h2>
+        <h2 *ngIf="shippingSelected.id == 2" class="title">Agencias</h2>
+
+
+        <div class="right-actions">
+
+            <a (click)="goToTab(1)" class="link-word">Volver a formas de envío</a>
+
+        </div> <!-- .right-actions -->
+
+    </div><!-- .title-holder -->
+
+    <p class="text aclarative-text" *ngIf="shippingSelected.id == 1"> Seleccione la dirección donde quiere que su compra
+        sea enviada.</p>
+ 
+        <p class="text aclarative-text" *ngIf="shippingSelected.id == 2"> Seleccione la agencia donde quiere retirar su
+                compra.</p>
+
+
+    <form class="styled-form" [formGroup]="addressForm">
+
+
+        <!-- DIRECCIONES -->
+        <div *ngIf="shippingSelected.id == 1" class="radios-container">
+
+            <label class="radio-holder" *ngFor="let address of addressesData">
+
+                <input type="radio" [value]="address.id" class="input-radio" formControlName="address"
+                    (change)="setAddress()">
+                <span class="circle"></span>
+                <span class="text">{{address.address}} <span class="small">
+                        <span class="updateState">{{address.state}}</span>, <span
+                            class="updateZipcode">{{address.zipCode}}</span> </span></span>
+
+            </label><!-- .radio-holder -->
+
+
+        </div><!-- .radios-holder -->
+
+
+        <!-- AGENCIAS -->
+        <div *ngIf="shippingSelected.id == 2" class="radios-container">
+
+            <form [formGroup]="agencyForm">
+                <div class="select-container">
+                <select formControlName="department" class="select" (change)="selectDepto(agencyForm.get('department').value)">
+                    <option value=" " disabled selected>Seleccione un departamento..</option>
+                    <option value="Montevideo">Montevideo</option>
+                    <option value="Artigas">Artigas</option>
+                    <option value="Canelones">Canelones</option>
+                    <option value="Cerro Largo">Cerro Largo</option>
+                    <option value="Colonia">Colonia</option>
+                    <option value="Durazno">Durazno</option>
+                    <option value="Flores">Flores</option>
+                    <option value="Florida">Florida</option>
+                    <option value="Lavalleja">Lavalleja</option>
+                    <option value="Maldonado">Maldonado</option>
+                    <option value="Paysandú">Paysandú</option>
+                    <option value="Río Negro">Río Negro</option>
+                    <option value="Rivera">Rivera</option>
+                    <option value="Rocha">Rocha</option>
+                    <option value="Salto">Salto</option>
+                    <option value="San José">San José</option>
+                    <option value="Soriano">Soriano</option>
+                    <option value="Tacuarembó">Tacuarembó</option>
+                    <option value="Treinta y Tres">Treinta y Tres</option>
+                </select>
+            </div>
+            </form>
+
+            <ng-container *ngIf="agenciesFilteredData">
+
+                <label class="radio-holder" *ngFor="let agency of agenciesFilteredData">
+
+                    <input type="radio" [value]="agency.id" class="input-radio" formControlName="address"
+                        (change)="setAddress()">
+                    <span class="circle"></span>
+                    <span class="text">{{agency.address}}
+                        <span class="small">
+                            <span class="updateState">{{agency.state}}</span>
+                        </span>
+                    </span>
+
+                </label><!-- .radio-holder -->
+                
+            </ng-container>
+
+
+        </div><!-- .radios-holder -->
+
+        <a *ngIf="shippingSelected.id == 1" (click)="goToTab(5)" class="add-btn"
+            style="margin-top:20px;display: inline-block;">Agregar una dirección nueva</a>
+
+        <div class="submit-holder align-center">
+
+            <button type="button" class="link-btn highlighted success"
+                [attr.disabled]="!addressForm.valid ? true :null || ((shippingSelected.id == 2 && agenciesFilteredData.length == 0) ? true :null)" (click)="goToTab(3)"><span
+                    class="text">Continuar</span></button>
+
+
+            <a (click)="goToTab(1)" class="link-word">Volver a formas de envío</a>
+
+
+        </div><!-- .submit-holder -->
+
+    </form>
+
+</div><!-- .wrapper extramini -->
+
+
+
+
+
+<!-- *** METODO DE PAGO *** -->
+<div class="wrapper extramini" *ngIf="activeTab == 3">
+
+    <div *ngIf="paymentError" class="payment-error">
+        <p>Ha ocurrido un error con su pago. Por favor intente nuevamente.</p>
+    </div>
+
+    <app-cards [editMode]="false" [retryPay]="retryPay" (onChangeTab)="onChangeTab($event)"
+        (onSendCard)="onSendCard($event)"></app-cards>
+
+
+</div><!-- .wrapper extramini -->
+
+
+
+<!-- *** RESUMEN **** -->
+
+<div class="wrapper mini" *ngIf="activeTab == 4">
+
+    <div class="title-holder">
+
+        <h2 class="title">Resumen de compra</h2>
+
+        <div class="right-actions">
+
+            <a (click)="goToTab(3)" class="link-word">Volver a métodos de pago</a>
+
+        </div> <!-- .right-actions -->
+
+    </div><!-- .title-holder -->
+
+    <div class="styled-form">
+
+        <div class="cols">
+            <!--
+
+                        -->
+            <div class="col">
+
+                <p class="caption grey">Datos de compra</p>
+
+                <ul class="datos-list">
+                    <li class="item">
+                        <p class="text">Forma de envío: <strong> {{shippingName[shippingSelected.id].name}} </strong>
+                        </p>
+                        <button type="button" *ngIf="!retryPay" (click)="goToTab(1)" class="link-word">Editar forma de
+                            envio</button>
+
+                    </li>
+                    <li class="item" *ngIf="!newAddressName && shippingSelected.id != 3">
+
+                        <p class="text">Dirección: <strong> {{addressName[addressSelected].address}} </strong></p>
+                        <button type="button" (click)="goToTab(2)" *ngIf="!retryPay" class="link-word">Editar
+                            dirección</button>
+
+                    </li>
+                    <li class="item" *ngIf="newAddressName && shippingSelected.id != 3">
+
+                        <p class="text">Dirección: <strong> {{newAddressName}} {{shippingSelected.id}} </strong></p>
+                        <button type="button" (click)="goToTab(2)" *ngIf="!retryPay" class="link-word">Editar
+                            dirección</button>
+
+                    </li>
+
+
+                    <li class="item">
+                        <p class="text">Método de pago:
+                            <strong style="text-transform: uppercase" *ngIf="cardInfo.cardType"> {{cardInfo.cardType}}
+                            </strong>
+                            <strong style="text-transform: uppercase" *ngIf="cardInfo.name"> {{cardInfo.name}} </strong>
+                        </p>
+                        <button type="button" (click)="goToTab(3)" class="link-word">Editar método de
+                            pago</button>
+
+                    </li>
+                </ul>
+
+
+            </div>
+            <!--
+                        -->
+            <div class="col">
+
+                <p class="caption grey">Resumen de pago</p>
+
+
+                <div class="pago-holder">
+
+                    <table>
+
+                        <tbody>
+                            <tr class="item">
+                                <td class="text">Items ({{itemsCount}})</td>
+                                <td class="price">$ {{totalPrice | prettyNumber  }}</td>
+                            </tr>
+
+                            <tr class="item">
+                                <td class="text">Envío</td>
+                                <td class="price">$ {{shippingSelected.price | prettyNumber }}</td>
+                            </tr>
+                            <tr class="item">
+                                <td class="text">Cuotas</td>
+                                <td class="price">{{payForm.get('installments').value}}</td>
+                            </tr>
+                            <tr class="item total">
+                                <td class="text">Importe total</td>
+                                <td class="price">$ {{(totalPrice + shippingSelected.price) | prettyNumber  }} <span
+                                        class="small">IVA inc.</span> </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div><!-- .pago-holder -->
+
+
+            </div>
+            <!--
+                        
+                        -->
+        </div><!-- .cols -->
+
+        <div class="submit-holder align-center">
+
+            <button type="button" [class.loading]="loading" [attr.disabled]="loading ? true : null"
+                class="link-btn highlighted success" (click)="sendOrder()"><span class="text">Finalizar
+                    compra</span><span class="spinner"></span></button>
+
+            <div *ngIf="errorMessage" class="message">{{errorMessage}}</div><!-- .message -->
+
+        </div> <!-- .submit-holder -->
+
+    </div>
+
+</div><!-- .right-side -->
+
+
+
+<!-- *** AGREGAR DIRECCION *** -->
+<div class="wrapper extramini" *ngIf="activeTab == 5">
+
+    <div id="address-new" class="address-view active">
+
+        <div class="title-holder">
+            <p class="title">Agregar nueva dirección</p>
+
+            <div class="right-actions">
+
+                <a (click)="goToTab(2)" class="link-word toggleAddressView">Volver a mis direcciones</a>
+
+            </div> <!-- .right-actions -->
+        </div><!-- .title-holder -->
+
+        <form [formGroup]="newAddressForm" [class.address-form]="addressMessage" class="styled-form addressFormInit"
+            data-success="false">
+
+            <label class="label">
+                <span class="caption">Dirección</span>
+                <input type="text" class="input inputAddress" id="new-address-direccion" formControlName="address"
+                    value="" placeholder="Ingrese su dirección...">
+            </label>
+
+            <label class="label">
+                <span class="caption">Código postal</span>
+                <input type="text" class="input inputZipcode" id="new-address-codigo-postal" formControlName="zipCode"
+                    value="" placeholder="Ingrese su código postal...">
+            </label>
+
+            <label class="label">
+                <span class="caption">País</span>
+                <span class="select-container">
+                    <select id="new-address-country" formControlName="countryIso" class="input inputCountryIso">
+                        <option selected="" disabled="" value="Seleccione un país">Seleccione un país</option>
+                        <option value="UY">Uruguay</option>
+
+                    </select>
+                </span><!-- .select-container -->
+            </label>
+
+            <label class="label">
+                <span class="caption">Departamento</span>
+
+                <span class="select-container">
+                    <select id="new-address-departamento" formControlName="state" class="input inputState">
+
+                        <option value="Montevideo">Montevideo</option>
+                        <option value="Artigas">Artigas</option>
+                        <option value="Canelones">Canelones</option>
+                        <option value="Cerro Largo">Cerro Largo</option>
+                        <option value="Colonia">Colonia</option>
+                        <option value="Durazno">Durazno</option>
+                        <option value="Flores">Flores</option>
+                        <option value="Florida">Florida</option>
+                        <option value="Lavalleja">Lavalleja</option>
+                        <option value="Maldonado">Maldonado</option>
+                        <option value="Paysandú">Paysandú</option>
+                        <option value="Rio Negro">Rio Negro</option>
+                        <option value="Rivera">Rivera</option>
+                        <option value="Rocha">Rocha</option>
+                        <option value="San José">San José</option>
+                        <option value="Salto">Salto</option>
+                        <option value="Soriano">Soriano</option>
+                        <option value="Tacuarembó">Tacuarembó</option>
+                        <option value="Treinta y tres">Treinta y tres</option>
+
+
+                    </select>
+                </span><!-- .select-container -->
+
+            </label>
+
+            <label class="label">
+                <span class="caption">Localidad</span>
+                <input type="text" class="input inputCity" id="new-address-localidad" formControlName="city" value=""
+                    placeholder="Ingrese su localidad...">
+            </label>
+
+            <label class="label">
+                <input type="checkbox" id="new-address-default" formControlName="isDefault" value="false"
+                    class="input-checkbox">
+                <span class="checkbox-holder"></span>
+                <span class="text">Usar como Predeterminada</span>
+            </label>
+
+            <div class="submit-holder align-center">
+                <button type="submit" class="link-btn highlighted success" (click)="sendAddress()"
+                    [class.loading]="loading"
+                    [attr.disabled]="!newAddressForm.valid ? true : null || loading ? true : null"><span
+                        class="text">Guardar</span><span class="spinner"></span></button>
+
+                <div *ngIf="addressMessage" class="message">{{addressMessage}}</div><!-- .message -->
+
+            </div> <!-- .submit-holder -->
+
+            <a (click)="goToTab(2)" class="link-word">Volver a mis direcciones</a>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- *** DETALLES DE PAGO *** -->
+
+<div class="wrapper extramini" *ngIf="activeTab == 7">
+
+
+    <div id="pay-new" class="address-view active">
+
+        <div class="title-holder">
+            <p class="title">Detalles de pago</p>
+
+            <div class="right-actions">
+
+                <a (click)="goToTab(3)" class="link-word toggleAddressView">Volver a métodos de pago</a>
+
+            </div> <!-- .right-actions -->
+        </div><!-- .title-holder -->
+
+
+
+
+        <form [formGroup]="payForm" class="styled-form">
+
+
+            <div class="radios-container">
+                <label class="radio-holder">
+                    <span class="text">
+                        <span class="card-logo {{cardInfo.cardType}}">{{cardInfo.cardType}}</span>
+                        <span class="small">
+                            <span class="updateState">**** **** **** {{cardInfo.lastDigits}}</span>
+                        </span>
+                    </span>
+                </label><!-- .radio-holder -->
+
+            </div>
+
+
+            <label class="label">
+                <span class="caption">CVV de la tarjeta seleccionada</span>
+
+                <input type="text" class="input input-auto" formControlName="cvv" minlength="3" maxlength="3" size="8"
+                    placeholder="CVV">
+
+            </label><!-- .radio-holder -->
+
+            <label class="label">
+                <span class="caption">Cantidad de cuotas</span>
+
+                <span class="select-container select-small">
+
+                    <select formControlName="installments" class="input input-small">
+                        <option *ngFor="let i of installments" [value]="i.installments">{{ i.installments }}</option>
+                    </select>
+
+                </span>
+
+            </label>
+
+            <div class="message-holder" style="margin-top: 20px">
+                <p class="aclarative-text">Podrás ver un resumen antes de finalizar la compra.</p>
+            </div>
+            <div class="submit-holder align-center">
+                <button type="submit" class="link-btn highlighted success" (click)="goToTab(4)"
+                    [class.loading]="loading"
+                    [attr.disabled]="!payForm.valid ? true : null || loading ? true : null"><span
+                        class="text">Continuar</span><span class="spinner"></span></button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+<app-cart *ngIf="!displayCheckout && displayCart" (onDisplayCheckout)="onDisplayCheckout($event)"></app-cart>
+<app-checkout *ngIf="displayCheckout && !displayCart" (onDisplayCheckout)="onDisplayCheckout($event)"></app-checkout>
+
+<div *ngIf="displayCards" class="wrapper mini">
+    <app-cards [editMode]="true"></app-cards>
+</div>

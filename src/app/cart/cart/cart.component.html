@@ -1,0 +1,87 @@
+<div class="wrapper mini">
+
+    <div class="title-holder">
+
+        <p class="title">Carrito</p>
+
+    </div><!-- .title-holder -->
+
+    <div class="styled-form" *ngIf="productsList.length > 0">
+
+        <div class="carrito-holder">
+
+            <table class="">
+
+                <thead>
+                    <tr>
+                        <th class="caption grey">Producto</th>
+                        <th></th>
+                        <th class="caption grey">Cantidad</th>
+                        <th class="caption grey">Precio unitario </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="item" *ngFor="let product of productsList; let i = index"
+                        [class.no-stock]="checkStock(product.stock,product.id)">
+                        <td colspan="2" class="info">
+                            <button type="button" class="delete-btn"
+                                (click)="removeProductFromCart(product.id)"></button>
+
+                            <div class="image" [style.background-image]="'url(//api.columnis.com/uploads/065/images/thumbs/9_' + product.pictureId + '_60@2.jpg)'" ></div>
+                            <p class="name">
+                                {{product.name}}
+                                <span *ngIf="checkStock(product.stock,product.id)" class="no-stock">No hay stock
+                                    suficiente, solo quedan {{product.stock}}</span>
+                            </p>
+
+                        </td>
+                        <td class="input-holder">
+
+                            <button type="button" class="input-btn prev" (click)="reduceValue(product.id)"></button>
+                            <p class="input">{{productsQuantities[product.id]}}</p>
+                            <button type="button" class="input-btn next" (click)="increaseValue(product.id)"></button>
+                        </td>
+                        <td class="price">
+                            <p class="text">$ {{product.price | prettyNumber  }}</p>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div class="total-container">
+                <!-- -->
+                <p class="total"><span class="text">Total</span> $ {{totalPrice | prettyNumber }}</p>
+            </div><!-- .total-container -->
+
+        </div><!-- .carrito-holder -->
+
+        <div class="submit-holder align-center">
+
+            <button *ngIf="isLogged" type="submit" class="link-btn highlighted success"
+                [attr.disabled]="checkStocks(productsList) ? true : null" (click)="goToCheckout()"><span
+                    class="text">Finalizar compra</span></button>
+
+                    <div *ngIf="isLogged && checkStocks(productsList)" class="payment-error" style="margin-top: 20px">
+                            <p>Existen productos sin stock. Por favor modifique la cantidad de productos.</p>
+                        </div>
+
+            <div *ngIf="!isLogged" class="not-logged-div">
+                <p class="text">Para finalizar la compra debes iniciar sesión</p>
+                <button type="button" (click)="goToLogin()" class="link-btn highlighted success">Iniciar sesión</button>
+            </div>
+
+        </div><!-- .submit-holder -->
+
+    </div>
+
+
+    <!-- EMPTY PLACEHOLDER -->
+
+    <div class="placeholder" *ngIf="productsList.length == 0">
+        <p class="text">No hay productos en su carrito</p>
+    </div> <!-- .placeholder -->
+
+</div><!-- .right-side -->
